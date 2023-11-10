@@ -309,23 +309,27 @@ def order_list(request):
     return render(request, 'RentACar/order_list.html', context)
 
 def order_tracker(request):
-    return render(request, 'RentACar/order_tracker.html')
+    user_is_staff = request.user.is_staff
+
+    if user_is_staff:
+        orders = Order.objects.all()
+    else:
+        orders = Order.objects.filter(userid=request.user)
+
+    context = {
+        'user_is_staff': user_is_staff,
+        'orders': orders,
+    }
+
+    return render(request, 'RentACar/order_tracker.html', context)
 
 def update_order(request):
     if request.method == 'POST' and request.user.is_staff:
         order_number = request.POST.get('orderNumber')
         status = int(request.POST.get('status'))
-        start_date = request.POST.get('startDate')
-        end_date = request.POST.get('endDate')
-        duration = float(request.POST.get('duration'))
-        total_price = float(request.POST.get('totalPrice'))
-
+        
         order = get_object_or_404(Order, orderNumber=order_number)
         order.status = status
-        order.startDate = start_date
-        order.endDate = end_date
-        order.duration = duration
-        order.total = total_price
         order.save()
 
         return redirect('order_tracker')

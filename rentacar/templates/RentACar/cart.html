@@ -205,6 +205,8 @@
                     {% endif %}
 
                     {% if user.is_authenticated %}
+                    <li><a href="{% url 'order_list' %}">Order History</a></li>
+                    <li><a href="{% url 'order_tracker' %}">Order Tracker</a></li>
                     <button><a href="{% url 'logout' %}">Logout</a></button>
                     {% else %}
                     <button><a href="{% url 'login' %}">Login</a></button>

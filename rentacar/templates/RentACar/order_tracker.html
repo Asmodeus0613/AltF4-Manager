@@ -7,6 +7,8 @@
         <title>RENTACAR: Order List</title>
         <link rel="icon" href="{% static 'RentACar/images/favicon.jpg' %}" type="image/jpg">
         <link rel="stylesheet" type="text/css" href="{% static 'RentACar/css/car_list.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'RentACar/css/order_tracker.css' %}">
+    </head>
         <style>
             * {
                 text-decoration: none;
@@ -146,6 +148,7 @@
                     {% endif %}
                     {% if user.is_authenticated %}
                     <li><a href="{% url 'order_list' %}">Order History</a></li>
+                    <li><a href="{% url 'order_tracker' %}">Order Tracker</a></li>
                     <button><a href="{% url 'logout' %}">Logout</a></button>
                     {% else %}
                     <button><a href="{% url 'login' %}">Login</a></button>
@@ -156,39 +159,106 @@
     </header>
 
     {% if user.is_authenticated %}
-        {% if user.is_staff %}
-            <!-- Admin Interface -->
-            <h2>Welcome, {{ user.username }} (Admin)</h2>
-            <form method="post" action="{% url 'update_order' %}">
-                {% csrf_token %}
-                <label for="orderNumber">Order Number:</label>
-                <input type="text" name="orderNumber" required>
-                <br>
-                <label for="status">Status:</label>
-                <select name="status" required>
-                    <option value="0">Pending</option>
-                    <option value="1">Confirmed</option>
-                    <option value="2">Canceled</option>
-                    <option value="3">Reserved</option>
-                </select>
-                <br>
-                <button type="submit">Update Order</button>
-            </form>
-        {% else %}
-            <!-- Regular User Interface -->
-            <h2>Welcome, {{ user.username }}</h2>
-            <form method="post" action="{% url 'check_order_status' %}">
-                {% csrf_token %}
-                <label for="orderNumber">Enter Order Number:</label>
-                <input type="text" name="orderNumber" required>
-                <br>
-                <button type="submit">Check Order Status</button>
-            </form>
-        {% endif %}
+    {% if user.is_staff %}
+    <!-- Admin Interface -->
+    <div class="admin-interface">
+        <h2>Welcome, {{ user.username }} (Admin)</h2>
+        <form method="post" action="{% url 'update_order' %}">
+            {% csrf_token %}
+            <label for="orderNumber">Order Number:</label>
+            <input type="text" name="orderNumber" required>
+            <br>
+            <label for="status">Status:</label>
+            <select name="status" required>
+                <option value="0">Pending</option>
+                <option value="1">Confirmed</option>
+                <option value="2">Canceled</option>
+                <option value="3">Reserved</option>
+            </select>
+            <br>
+            <button type="submit">Update Order</button>
+        </form>
+
+        <!-- Order List Table -->
+        <h2>Order List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Order Number</th>
+                    <th>User ID</th>
+                    <th>Car ID</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through orders and display them -->
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.orderNumber }}</td>
+                    <td>{{ order.userid.username }}</td>
+                    <td>{{ order.carid.CarID }}</td>
+                    <td>{{ order.get_status_display }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% else %}
-        <p>You must be logged in to access this page.</p>
-    {% endif %}
+    <div class="user-interface">
+        <h2>Welcome, {{ user.username }}</h2>
+        <form id="orderForm">
+            {% csrf_token %}
+            <label for="orderNumber">Enter Order Number:</label>
+            <input type="text" id="orderNumber" name="orderNumber" required>
+            <br>
+            <button type="submit">Check Order Status</button>
+        </form>
+
+        <!-- Display Order Status -->
+        <div class="order-status" id="orderStatus">
+            <!-- Order status will be displayed here dynamically -->
+        </div>
+    </div>
+{% endif %}
+{% else %}
+<p>You must be logged in to access this page.</p>
+{% endif %}
     
     <!-- Add any additional content or JavaScript at the end of the body -->
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const orderForm = document.querySelector('#orderForm');
+        const orderStatusContainer = document.querySelector('#orderStatus');
+
+        orderForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const orderNumber = document.querySelector('#orderNumber').value;
+
+            // Make an AJAX request to check the order status
+            fetch('{% url "check_order_status" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({ 'orderNumber': orderNumber }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the order status container with the response
+                    orderStatusContainer.innerHTML = 'Order Status: ' + data.status;
+                } else {
+                    // Handle the case where the order is not found or other errors
+                    orderStatusContainer.innerHTML = 'Error: ' + data.error;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+</script>
+
 </html>
