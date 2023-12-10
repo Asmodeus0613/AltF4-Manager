@@ -142,3 +142,14 @@ LOGIN_REDIRECT_URL = 'home'  # Correct URL name for the homepage view
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# settings.py
+
+# For your app
+SESSION_COOKIE_NAME = 'your_app_session'
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Or any other session engine you prefer
+
+# For Django admin
+ADMIN_SESSION_COOKIE_NAME = 'django_admin_session'
+ADMIN_SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Or any other session engine used specifically for admin
+# Or any other session engine used specifically for admin

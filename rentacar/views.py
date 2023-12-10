@@ -6,13 +6,13 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_protect
-from django.contrib.auth import logout
+from django.contrib.auth import logout as django_logout
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.shortcuts import render
-from django.shortcuts import render
+from django.shortcuts import redirect
 from .models import Car, Order
 from django.shortcuts import render, get_object_or_404
 from django.forms import ModelForm
@@ -219,8 +219,9 @@ def register(request):
 
 
 def logout_view(request):
-    logout(request)
-    return redirect("login")
+    if request.user.is_authenticated:
+        django_logout(request)  # Logout only the current user
+    return redirect('login')  # Redirect to the login page
 
 
 class CarForm(ModelForm):
