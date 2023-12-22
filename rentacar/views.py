@@ -279,7 +279,7 @@ def update_car(request, car_id):
 
 
 def delete_car(request, car_id):
-    car = get_object_or_404(Car, id=car_id)
+    car = get_object_or_404(Car, CarID=car_id)
     if request.method == "POST":
         car.delete()
         return redirect("car_management")
