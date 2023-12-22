@@ -28,6 +28,7 @@ urlpatterns = [
     path('order_tracker/', views.order_tracker, name='order_tracker'),
     path('update_order/', views.update_order, name='update_order'),
     path('check_order_status/', views.check_order_status, name='check_order_status'),
+    path('cancel_order/', views.cancel_order, name='cancel_order'),
 ]
 
 if settings.DEBUG:

@@ -336,6 +336,28 @@ def update_order(request):
         return redirect('order_tracker')
     else:
         return JsonResponse({'success': False, 'error': 'Invalid request method or user is not an admin'})
+    
+def cancel_order(request):
+    if request.method == 'POST' and request.user.is_authenticated and not request.user.is_staff:
+        order_number = request.POST.get('orderNumber')
+
+        # Retrieve the order
+        order = get_object_or_404(Order, orderNumber=order_number, userid=request.user)
+
+        if order.status != Order.CANCELED:
+            # Update the order status to 'Canceled'
+            order.status = Order.CANCELED
+            order.save()
+
+            # Update the related car status if needed
+            car = order.carid
+            if car.status != 0:
+                car.status = 0
+                car.save()
+
+            return JsonResponse({'success': True})
+
+    return JsonResponse({'success': False})
 
 def check_order_status(request):
     if request.method == 'POST' and request.user.is_authenticated:
@@ -348,3 +370,5 @@ def check_order_status(request):
             return JsonResponse({'success': False, 'error': 'Order not found for the user'})
     else:
         return JsonResponse({'success': False, 'error': 'Invalid request method or user is not authenticated'})
+    
+    
