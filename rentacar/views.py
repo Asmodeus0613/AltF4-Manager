@@ -345,11 +345,9 @@ def cancel_order(request):
         order = get_object_or_404(Order, orderNumber=order_number, userid=request.user)
 
         if order.status != Order.CANCELED:
-            # Update the order status to 'Canceled'
             order.status = Order.CANCELED
             order.save()
 
-            # Update the related car status if needed
             car = order.carid
             if car.status != 0:
                 car.status = 0
