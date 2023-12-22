@@ -1,140 +1,148 @@
 <!DOCTYPE html>
 {% load static %}
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>RENTACAR: Order List</title>
-        <link rel="icon" href="{% static 'RentACar/images/favicon.jpg' %}" type="image/jpg">
-        <link rel="stylesheet" type="text/css" href="{% static 'RentACar/css/car_list.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'RentACar/css/order_tracker.css' %}">
-    </head>
-        <style>
-            * {
-                text-decoration: none;
-            }
-    
-            body {
-                margin: 0;
-                padding: 0;
-                background-repeat: no-repeat;
-                background-size: cover;
-                background-color: #1C1C1C;
-            }
-    
-            .navbar {
-                background: rgb(42, 42, 42);
-                font-family: calibri;
-                padding: 0;
-                margin: 0;
-            }
-    
-            .navdiv {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 5px 15px;
-            }
-    
-            .brand a {
-                font-size: 15px;
-                font-weight: 600;
-                color: white;
-            }
-    
-            nav li {
-                list-style: none;
-                display: inline-block;
-            }
-    
-            nav li a {
-                color: white;
-                font-size: 16px;
-                font-weight: bold;
-                margin-right: 20px;
-            }
-    
-            nav button {
-                background-color: black;
-                margin-left: 10px;
-                border-radius: 10px;
-                padding: 8px;
-                width: 80px;
-            }
-    
-            nav button a {
-                color: white;
-                font-weight: bold;
-                font-size: 14px;
-            }
-    
-            .red-text {
-                color: red;
-                font-weight: bold;
-            }
-    
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-    
-            table, th, td {
-                border: 1px solid black;
-            }
-    
-            th, td {
-                padding: 10px;
-                text-align: left;
-            }
-    
-            h1 {
-                font-size: 24px;
-                color: #ffffff;
-            }
-    
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                background-color: #fff;
-            }
-    
-            th, td {
-                padding: 12px;
-                text-align: left;
-            }
-    
-            th {
-                background-color: #333;
-                color: #fff;
-            }
-    
-            tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
-    
-            tr:hover {
-                background-color: #ddd;
-            }
-        </style>
-    
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const rentButtons = document.querySelectorAll('.rent-button');
-    
-                rentButtons.forEach(button => {
-                    button.addEventListener('click', function() {
-                        const carID = this.dataset.carid;
-                        window.location.href = `/cars/${carID}/`;
-                    });
-                });
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RENTACAR: Order List</title>
+    <link rel="icon" href="{% static 'RentACar/images/favicon.jpg' %}" type="image/jpg">
+    <link rel="stylesheet" type="text/css" href="{% static 'RentACar/css/car_list.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'RentACar/css/order_tracker.css' %}">
+</head>
+<style>
+    * {
+        text-decoration: none;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-color: #1C1C1C;
+    }
+
+    .navbar {
+        background: rgb(42, 42, 42);
+        font-family: calibri;
+        padding: 0;
+        margin: 0;
+    }
+
+    .navdiv {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 5px 15px;
+    }
+
+    .brand a {
+        font-size: 15px;
+        font-weight: 600;
+        color: white;
+    }
+
+    nav li {
+        list-style: none;
+        display: inline-block;
+    }
+
+    nav li a {
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        margin-right: 20px;
+    }
+
+    nav button {
+        background-color: black;
+        margin-left: 10px;
+        border-radius: 10px;
+        padding: 8px;
+        width: 80px;
+    }
+
+    nav button a {
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .red-text {
+        color: red;
+        font-weight: bold;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid black;
+    }
+
+    th,
+    td {
+        padding: 10px;
+        text-align: left;
+    }
+
+    h1 {
+        font-size: 24px;
+        color: #ffffff;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #fff;
+    }
+
+    th,
+    td {
+        padding: 12px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #333;
+        color: #fff;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #ddd;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const rentButtons = document.querySelectorAll('.rent-button');
+
+        rentButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const carID = this.dataset.carid;
+                window.location.href = `/cars/${carID}/`;
             });
-        </script>
-    </head>
+        });
+    });
+</script>
+</head>
+
 <body>
     <header>
         <nav class="navbar">
             <div class="navdiv">
-                <div class="brand"><a href="{% url 'home' %}"><h1><span class="white-text">RENTA</span><span class="red-text">CAR</span></h1></a></div>
+                <div class="brand"><a href="{% url 'home' %}">
+                        <h1><span class="white-text">RENTA</span><span class="red-text">CAR</span></h1>
+                    </a></div>
                 <div class="centered-text" style="text-align: left;">
                     {% if user.is_authenticated %}
                     <h2>Welcome, {{ user.username }}</h2>
@@ -218,20 +226,21 @@
         <div class="order-status" id="orderStatus">
             <!-- Order status will be displayed here dynamically -->
         </div>
+        <button id="cancelOrderBtn" style="display: none;">Cancel Order</button>
     </div>
-{% endif %}
-{% else %}
-<p>You must be logged in to access this page.</p>
-{% endif %}
-    
+    {% endif %}
+    {% else %}
+    <p>You must be logged in to access this page.</p>
+    {% endif %}
+
     <!-- Add any additional content or JavaScript at the end of the body -->
 </body>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const orderForm = document.querySelector('#orderForm');
         const orderStatusContainer = document.querySelector('#orderStatus');
 
-        orderForm.addEventListener('submit', function(event) {
+        orderForm.addEventListener('submit', function (event) {
             event.preventDefault();
             const orderNumber = document.querySelector('#orderNumber').value;
 
@@ -244,19 +253,51 @@
                 },
                 body: new URLSearchParams({ 'orderNumber': orderNumber }),
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update the order status container with the response
-                    orderStatusContainer.innerHTML = 'Order Status: ' + data.status;
-                } else {
-                    // Handle the case where the order is not found or other errors
-                    orderStatusContainer.innerHTML = 'Error: ' + data.error;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.error) {
+                        // Update the order status container with the response
+                        orderStatusContainer.innerHTML = 'Order Status: ' + data.status;
+
+                        // Show Cancel Order Button for non-admin users
+                        const cancelOrderBtn = document.getElementById('cancelOrderBtn');
+                        cancelOrderBtn.style.display = '{% if not user.is_staff %}inline-block{% endif %}';
+
+                        // Handle Cancel Order Button Click
+                        cancelOrderBtn.addEventListener('click', function () {
+                            const confirmation = confirm('Are you sure you want to cancel this order?');
+                            if (confirmation) {
+                                // Make AJAX request to cancel the order
+                                fetch('{% url "cancel_order" %}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRFToken': '{{ csrf_token }}',
+                                        'Content-Type': 'application/x-www-form-urlencoded',
+                                    },
+                                    body: new URLSearchParams({ 'orderNumber': orderNumber }),
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            orderStatusContainer.innerHTML = 'Order Status: Canceled';
+                                            // Additional logic to update car status if needed
+                                        } else {
+                                            alert('Failed to cancel order.');
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                    });
+                            }
+                        });
+                    } else {
+                        // Handle the case where the order is not found or other errors
+                        orderStatusContainer.innerHTML = 'Error: ' + data.error;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         });
     });
 </script>
